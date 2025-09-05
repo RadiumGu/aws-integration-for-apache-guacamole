@@ -2,11 +2,11 @@
 
 secret=$(aws ssm get-parameter --name "$1" --region "$2" --with-decryption --query "Parameter.Value" --output text)
 
-yum update -y
-amazon-linux-extras install mate-desktop1.x
+dnf update -y
+dnf groupinstall -y "MATE Desktop"
 echo 'PREFERRED=/usr/bin/mate-session' > /etc/sysconfig/desktop
-yum -y install tigervnc-server
-yum -y install expect
+dnf install -y tigervnc-server
+dnf install -y expect
 
 echo '#!/bin/sh' > /home/ec2-user/script.sh
 echo 'prog=/usr/bin/vncpasswd' >> /home/ec2-user/script.sh
@@ -35,7 +35,7 @@ systemctl enable vncserver@:1
 systemctl start vncserver@:1
 
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-yum -y install ./google-chrome-stable_current_*.rpm
+dnf install -y ./google-chrome-stable_current_*.rpm
 
 rm /home/ec2-user/script.sh
 rm /home/ec2-user/linux-user-data.sh
